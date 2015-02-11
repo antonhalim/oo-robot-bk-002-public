@@ -1,0 +1,44 @@
+{
+  "pharmacy": [
+    "amoxicillin",
+    "penicillin",
+    "eszopiclone",
+    "levothyroxine",
+    "rosuvastatin",
+    "epipen",
+    "Little McTuggy"
+  ],
+  "kitchen": [
+    "vegetarian meal",
+    "liquid meal",
+    "normal meal",
+    "gluten-free meal",
+    "dirty plate",
+    "dirty plate"
+  ],
+  "pediatric wing": [
+    "dirty hospital gown",
+    "dirty bed sheets",
+    "dirty plate",
+    "dirty plate"
+  ],
+  "emergency room": [
+    "dirty plate",
+    "dirty scrubs",
+    "dirty plate"
+  ],
+  "laundry room": [
+    "dirty sheets",
+    "dirty sheets",
+    "dirty sheets",
+    "dirty gown",
+    "dirty scrubs",
+    "dirty scrubs",
+    "dirty gown",
+    "clean sheets",
+    "clean towels",
+    "clean hospital gown"
+  ],
+  "charging station": [
+  ]
+}

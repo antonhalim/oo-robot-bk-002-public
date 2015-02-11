@@ -1,0 +1,33 @@
+{
+  "pharmacy": [
+    "doxycycline",
+    "xanax",
+    "vicoden",
+    "lipitor"
+  ],
+  "kitchen": [
+    "gluten-free meal",
+    "vegan meal",
+    "kosher meal",
+    "clean plates"
+  ],
+  "pediatric wing": [
+    "dirty plate",
+    "dirty plate",
+    "dirty plate"
+  ],
+  "emergency room": [
+    "clean scrubs"
+  ],
+  "laundry room": [
+    "dirty sheets",
+    "dirty hospital gown",
+    "dirty scrubs",
+    "clean sheets",
+    "clean towels",
+    "clean hospital gown"
+  ],
+  "charging station": [
+    "other robot"
+  ]
+}
