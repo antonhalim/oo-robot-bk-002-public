@@ -68,7 +68,7 @@ Your robot will be initialized with a name, location, and a hospital information
 
 ##### `location=`
 
-Your robot will have a customed `location=` method. This method will save the current location as `previous_loaction` before updating its location. This way, your robot can remember where it came from. Every time your robot moves from one location to another, it loses a 1% of its battery life.
+Your robot will have a custom `location=` method. This method will save the current location as `previous_loaction` before updating its location. This way, your robot can remember where it came from. Every time your robot moves from one location to another, it loses a 1% of its battery life.
 
 ##### `arrange_items_alphabetically`
 
