@@ -54,6 +54,7 @@ describe "Robot" do
     it "starts 75% charged" do
       robots.each { |r| expect(r.battery).to eq(75) }
     end
+
   end
 
   describe "#previous_location=" do
@@ -101,10 +102,18 @@ describe "Robot" do
       end
     end
 
+    it "doesn't change if given a new location that is the same as the current location" do
+      ["pharmacy", "pediatric wing"].each { |l| baymax.location = l }
+      expect(baymax.location).to eq("pediatric wing")
+      expect(baymax.previous_location).to eq("pharmacy")
+      baymax.location = "pediatric wing"
+      expect(baymax.location).to eq("pediatric wing")
+      expect(baymax.previous_location).to eq("pharmacy")
+    end
+
   end
 
   describe "#arrange_items_alphabetically" do
-
     it "rearranges all items in its location alphabetically" do
       ["kitchen", "emergency room"].each do |place|
         baymax.location = place
@@ -112,6 +121,155 @@ describe "Robot" do
         baymax.arrange_items_alphabetically
         expect(baymax.hospital[place]).to eq(sorted_items)
       end
+    end
+  end
+
+  describe "#recharge" do
+    it "if the charging station is empty, it recharges to 100%" do
+      baymax.battery = 20
+      baymax.recharge
+      expect(baymax.battery).to eq(100)
+    end
+
+    it "doesn't recharge if the charging station is not empty" do
+      wall_e.battery = 10
+      wall_e.recharge
+      expect(wall_e.battery).to eq(10)
+    end
+
+  end
+
+  describe "#collect_dirty_dishes" do
+    it "collects every dirty dish and moves it to the kitchen" do
+      robots.each do |robot|
+        dirty_dish_count = count_item(robot, "dirty dish")
+        robot.collect_dirty_dishes
+        robot.hospital.each { |l, i| expect(i).to_not include("dirty dish") unless l == "kitchen" }
+        expect(robot.hospital["kitchen"].count("dirty dish")).to eq(dirty_dish_count)
+      end
+    end
+
+    it "winds up in the kitchen" do
+      baymax.collect_dirty_dishes
+      expect(baymax.location).to eq("kitchen")
+    end
+  end
+
+  describe "#do_dishes" do
+
+    it "changes location to kitchen" do
+      baymax.location = "pharmacy"
+      baymax.do_dishes
+      expect(baymax.location).to eq("kitchen")
+    end
+
+    it "turns all the dirty dishes in the kitchen into clean dishes" do
+      dirty_dish_count = count_item(baymax, "dirty dish", "kitchen")
+      clean_dish_count = count_item(baymax, "clean dish", "kitchen")
+      total_dishes = dirty_dish_count + clean_dish_count
+      baymax.do_dishes
+      expect(baymax.hospital["kitchen"].count("clean dish")).to eq(total_dishes)
+    end
+  end
+
+  describe "#deliver_item" do
+
+    it "accepts two arguments, the name of the item and the destination" do
+      expect { baymax.deliver_item("penicillin", "pediatric wing") }.to_not raise_error
+    end
+
+    it "finds the item in the hash and moves it to the destination" do
+      baymax.deliver_item("penicillin", "pediatric wing")
+      expect(baymax.hospital["pharmacy"]).to_not include("penicillin")
+      expect(baymax.hospital["pediatric wing"]).to include("penicillin")
+    end
+
+    it "only moves one item at a time" do
+      count = 1
+      2.times do
+        baymax.deliver_item("amoxicillin", "emergency room")
+        expect(baymax.hospital["pharmacy"].count("amoxicillin")).to eq(2 - count)
+        expect(baymax.hospital["emergency room"].count("amoxicillin")).to eq(count)
+        count += 1
+      end
+    end
+
+    it "changes its location to the place where the item was found then to the destination" do
+      baymax.location = "kitchen"
+      baymax.deliver_item("penicillin", "pediatric wing")
+      expect(baymax.location).to eq("pediatric wing")
+      expect(baymax.previous_location).to eq("pharmacy")
+    end
+
+    it "returns an error if the item cannot be found in the hospital" do
+      expect(baymax.deliver_item("rare antique lamp", "emergency room")).to eq("item not found")
+    end
+
+    it "doesn't add an item to the hospital if the item doesn't exist" do
+      baymax.deliver_item("rare antique lamp", "emergency room")
+      baymax.hospital do |location, items|
+        expect(item).to_not include("rare antique lamp")
+      end
+    end
+
+  end
+
+  describe "#collect_dirty_laundry" do
+
+    it "moves dirty sheets to the laundry room" do
+      dirty_sheet_count = count_item(baymax, "dirty sheet")
+      baymax.collect_dirty_laundry
+      baymax.hospital.each do |l, i| 
+        expect(i).to_not include("dirty sheet") unless l == "laundry room"
+      end
+      expect(baymax.hospital["laundry room"].count("dirty sheet")).to eq(dirty_sheet_count)
+    end
+
+    it "moves dirty gowns to the laundry room" do
+      dirty_gown_count = count_item(baymax, "dirty gown")
+      baymax.collect_dirty_laundry
+      baymax.hospital.each do |l, i| 
+        expect(i).to_not include("dirty gown") unless l == "laundry room"
+      end
+      expect(baymax.hospital["laundry room"].count("dirty gown")).to eq(dirty_gown_count)
+    end
+
+    it "moves dirty scrubs to the laundry room" do
+      dirty_scrubs_count = count_item(baymax, "dirty scrubs")
+      baymax.collect_dirty_laundry
+      baymax.hospital.each do |l, i| 
+        expect(i).to_not include("dirty scrubs") unless l == "laundry room"
+      end
+      expect(baymax.hospital["laundry room"].count("dirty scrubs")).to eq(dirty_scrubs_count)
+    end
+
+    it "winds up in the laundry room" do
+      baymax.location = "kitchen"
+      baymax.collect_dirty_laundry
+      expect(baymax.location).to eq("laundry room")
+    end
+
+  end
+
+  describe "#do_laundry" do
+
+    it "makes the location the laundry room" do
+      baymax.location = "kitchen"
+      baymax.do_laundry
+      expect(baymax.location).to eq("laundry room")
+    end
+
+    it "makes all the dirty linens (sheet, gown, scrubs) in the laundry room clean" do
+      location = "laundry room"
+      linens = ["sheet", "gown", "scrubs"]
+      dirty_count = 0
+      linens.each { |l| dirty_count += count_item(baymax, "dirty #{l}", location) }
+      clean_count = 0
+      linens.each { |l| clean_count += count_item(baymax, "clean #{l}", location) }
+      baymax.do_laundry
+      final_count = 0
+      linens.each { |l| final_count += count_item(baymax, "clean #{l}", location) }
+      expect(final_count).to eq(dirty_count + clean_count)
     end
 
   end

@@ -1,6 +1,7 @@
 {
   "pharmacy": [
     "amoxicillin",
+    "amoxicillin",
     "penicillin",
     "eszopiclone",
     "levothyroxine",
@@ -17,27 +18,28 @@
     "dirty plate"
   ],
   "pediatric wing": [
-    "dirty hospital gown",
-    "dirty bed sheets",
+    "dirty gown",
+    "dirty sheet",
     "dirty plate",
     "dirty plate"
   ],
   "emergency room": [
     "dirty plate",
     "dirty scrubs",
-    "dirty plate"
+    "dirty plate",
+    "dirty sheet"
   ],
   "laundry room": [
-    "dirty sheets",
-    "dirty sheets",
-    "dirty sheets",
+    "dirty sheet",
+    "dirty sheet",
+    "dirty sheet",
     "dirty gown",
     "dirty scrubs",
     "dirty scrubs",
     "dirty gown",
-    "clean sheets",
+    "clean sheet",
     "clean towels",
-    "clean hospital gown"
+    "clean gown"
   ],
   "charging station": [
   ]
