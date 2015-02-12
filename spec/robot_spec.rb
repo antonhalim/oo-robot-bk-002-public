@@ -111,6 +111,13 @@ describe "Robot" do
       expect(baymax.previous_location).to eq("pharmacy")
     end
 
+    it "doesn't lose any charge if the new location is the same as its current location" do
+      baymax.location = "pediatric wing"
+      original_battery = baymax.battery
+      baymax.location = "pediatric wing"
+      expect(baymax.battery).to eq(original_battery)
+    end
+
   end
 
   describe "#arrange_items_alphabetically" do
@@ -121,6 +128,13 @@ describe "Robot" do
         baymax.arrange_items_alphabetically
         expect(baymax.hospital[place]).to eq(sorted_items)
       end
+    end
+
+    it "does not rearrange items in other locations" do
+      baymax.location = "kitchen"
+      baymax.arrange_items_alphabetically
+      laundry = baymax.hospital["laundry room"]
+      expect(laundry).to_not eq(laundry.sort)
     end
   end
 
@@ -179,9 +193,14 @@ describe "Robot" do
     end
 
     it "finds the item in the hash and moves it to the destination" do
-      baymax.deliver_item("penicillin", "pediatric wing")
-      expect(baymax.hospital["pharmacy"]).to_not include("penicillin")
-      expect(baymax.hospital["pediatric wing"]).to include("penicillin")
+      {
+        "penicillin" =>  ["pediatric wing", "pharmacy"], 
+        "gluten-free meal" => ["emergency room", "kitchen"]
+      }.each do |item, locations|
+        baymax.deliver_item(item, locations[0])
+        expect(baymax.hospital[locations[1]]).to_not include(item)
+        expect(baymax.hospital[locations[0]]).to include(item)
+      end
     end
 
     it "only moves one item at a time" do
@@ -194,7 +213,7 @@ describe "Robot" do
       end
     end
 
-    it "changes its location to the place where the item was found then to the destination" do
+    it "changes its location to the place where the item was found and then to the destination" do
       baymax.location = "kitchen"
       baymax.deliver_item("penicillin", "pediatric wing")
       expect(baymax.location).to eq("pediatric wing")
