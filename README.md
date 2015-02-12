@@ -1,7 +1,7 @@
 ---
 tags: oo, oop
 languages: ruby
-resources: 1
+resources: 3
 ---
 
 # OO Robot
