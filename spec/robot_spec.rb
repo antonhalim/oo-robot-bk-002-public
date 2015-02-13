@@ -314,14 +314,14 @@ describe "Robot" do
       baymax.do_laundry
       expect(baymax.previous_location).to eq("kitchen")
       expect(baymax.location).to eq(location)
-    end
+    end 
 
     it "makes every dirty gown into a clean gown" do
       num_dirty = count_item(baymax, "dirty gown", location)
       num_clean = count_item(baymax, "clean gown", location)
       original_gown_count = num_dirty + num_clean
       baymax.do_laundry
-      final_gown_count = count_item(baymax, "dirty gown", location)
+      final_gown_count = count_item(baymax, "clean gown", location)
       expect(final_gown_count).to eq(original_gown_count)
     end
 
@@ -330,7 +330,7 @@ describe "Robot" do
       num_clean = count_item(baymax, "clean sheet", location)
       original_sheet_count = num_dirty + num_clean
       baymax.do_laundry
-      final_sheet_count = count_item(baymax, "dirty sheet", location)
+      final_sheet_count = count_item(baymax, "clean sheet", location)
       expect(final_sheet_count).to eq(original_sheet_count)
     end
 
@@ -339,7 +339,7 @@ describe "Robot" do
       num_clean = count_item(baymax, "clean scrubs", location)
       original_scrubs_count = num_dirty + num_clean
       baymax.do_laundry
-      final_scrubs_count = count_item(baymax, "dirty scrubs", location)
+      final_scrubs_count = count_item(baymax, "clean scrubs", location)
       expect(final_scrubs_count).to eq(original_scrubs_count)
     end
 
