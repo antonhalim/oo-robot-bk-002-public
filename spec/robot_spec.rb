@@ -139,16 +139,33 @@ describe "Robot" do
   end
 
   describe "#recharge" do
-    it "if the charging station is empty, it recharges to 100%" do
-      baymax.battery = 20
-      baymax.recharge
-      expect(baymax.battery).to eq(100)
+
+    context "empty charging station" do
+      it "it recharges to 100%" do
+        baymax.battery = 20
+        baymax.recharge
+        expect(baymax.battery).to eq(100)
+      end
+
+      it "changes location to the charging station" do
+        baymax.location = "pharmacy"
+        baymax.recharge
+        expect(baymax.location).to eq("charging station")
+      end
     end
 
-    it "doesn't recharge if the charging station is not empty" do
-      wall_e.battery = 10
-      wall_e.recharge
-      expect(wall_e.battery).to eq(10)
+    context "charging station occupied (there is a robot in the charging station array)" do
+      it "doesn't recharge if the charging station is not empty" do
+        wall_e.battery = 10
+        wall_e.recharge
+        expect(wall_e.battery).to eq(10)
+      end
+
+      it "doesn't go to the charging station if it is occupied" do
+        wall_e.location = "pharmacy"
+        wall_e.recharge
+        expect(wall_e.location).to eq("pharmacy")
+      end
     end
 
   end
