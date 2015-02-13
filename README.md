@@ -1,5 +1,5 @@
 ---
-tags: oo, oop
+tags: oo, oop, nested resources, data scructures, json
 languages: ruby
 resources: 3
 ---
