@@ -1,10 +1,10 @@
 describe "Robot" do
 
   let(:misson_bay_file_path) { "spec/fixtures/1_mission_bay_hospital.json" }
-  let(:mission_bay_hospital) { JSON.parse(File.read(misson_bay_file_path)) } 
+  let(:mission_bay_hospital) { JSON.parse(File.read(misson_bay_file_path)) }
   let(:el_camino_file_path) { "spec/fixtures/2_el_camino_hospital.json" }
-  let(:el_camino_hospital) { JSON.parse(File.read(el_camino_file_path)) } 
-  
+  let(:el_camino_hospital) { JSON.parse(File.read(el_camino_file_path)) }
+
   let(:baymax) { Robot.new("Baymax", "pharmacy", misson_bay_file_path) }
   let(:wall_e) { Robot.new("Wall-E", "kitchen", el_camino_file_path) }
   let(:robots) { [baymax, wall_e] }
@@ -16,7 +16,7 @@ describe "Robot" do
   end
 
   describe "#load_json_file" do
-    
+
     it "accepts a file path as an argument" do
       expect { baymax.load_json_file(misson_bay_file_path) }.to_not raise_error
     end
@@ -64,7 +64,7 @@ describe "Robot" do
     it "can tell you its previous location" do
       baymax.previous_location = "pediatric wing"
       expect(baymax.previous_location).to eq("pediatric wing")
-    end 
+    end
   end
 
   describe "#battery=" do
@@ -228,7 +228,7 @@ describe "Robot" do
 
     it "finds the item in the hash and moves it to the destination" do
       item_locations_hash = {
-        "penicillin" =>  ["pediatric wing", "pharmacy"], 
+        "penicillin" =>  ["pediatric wing", "pharmacy"],
         "gluten-free meal" => ["emergency room", "kitchen"]
       }
       item_locations_hash.each do |item, locations|
@@ -273,7 +273,7 @@ describe "Robot" do
     it "moves dirty sheets to the laundry room" do
       dirty_sheet_count = count_item(baymax, "dirty sheet")
       baymax.collect_dirty_laundry
-      baymax.hospital.each do |l, i| 
+      baymax.hospital.each do |l, i|
         expect(i).to_not include("dirty sheet") unless l == "laundry room"
       end
       expect(baymax.hospital["laundry room"].count("dirty sheet")).to eq(dirty_sheet_count)
@@ -282,7 +282,7 @@ describe "Robot" do
     it "moves dirty gowns to the laundry room" do
       dirty_gown_count = count_item(baymax, "dirty gown")
       baymax.collect_dirty_laundry
-      baymax.hospital.each do |l, i| 
+      baymax.hospital.each do |l, i|
         expect(i).to_not include("dirty gown") unless l == "laundry room"
       end
       expect(baymax.hospital["laundry room"].count("dirty gown")).to eq(dirty_gown_count)
@@ -291,7 +291,7 @@ describe "Robot" do
     it "moves dirty scrubs to the laundry room" do
       dirty_scrubs_count = count_item(baymax, "dirty scrubs")
       baymax.collect_dirty_laundry
-      baymax.hospital.each do |l, i| 
+      baymax.hospital.each do |l, i|
         expect(i).to_not include("dirty scrubs") unless l == "laundry room"
       end
       expect(baymax.hospital["laundry room"].count("dirty scrubs")).to eq(dirty_scrubs_count)
@@ -314,7 +314,7 @@ describe "Robot" do
       baymax.do_laundry
       expect(baymax.previous_location).to eq("kitchen")
       expect(baymax.location).to eq(location)
-    end 
+    end
 
     it "makes every dirty gown into a clean gown" do
       num_dirty = count_item(baymax, "dirty gown", location)
@@ -345,7 +345,7 @@ describe "Robot" do
 
     it "makes all the dirty linens (sheet, gown, scrubs) in the laundry room clean" do
       linens = ["sheet", "gown", "scrubs"]
-      
+
       dirty_linens = linens.each_with_object(0) { |l, c| c += count_item(baymax, "dirty #{l}", location) }
       clean_linens = linens.each_with_object(0) { |l, c| c += count_item(baymax, "clean #{l}", location) }
       original_linen_total = dirty_linens + clean_linens
